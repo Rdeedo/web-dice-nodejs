@@ -1,4 +1,6 @@
 const express = require('express')
+const path = require("path")
+
 app = express()
 
 const cors = require("cors")
@@ -11,10 +13,44 @@ const majorVersion = 1
 const minorVersion = 3
 
 // Use Express to publish static HTML, CSS, and JavaScript files that run in the browser. 
-app.use(express.static(__dirname + '/static'))
+app.use(express.static(path.join(__dirname + '/static')))
 app.use(cors({ origin: '*' }))
 
 // The app.get functions below are being processed in Node.js running on the server.
+// Wake endpoint
+app.get("/api", (request, response) => {
+	response.json({
+		message: "Dice API Awake"
+	})
+})
+
+//Dice roll endpoint
+app.get("/api/roll", (request, response) => {
+
+    const dice = parseInt(request.query.dice) || 1;
+    const sides = parseInt(request.query.sides) || 6;
+
+    let rolls = [];
+    let total = 0;
+
+    for (let i = 0; i < dice; i++) {
+
+        const roll =
+            Math.floor(Math.random() * sides) + 1;
+
+        rolls.push(roll);
+        total += roll;
+    }
+
+    response.json({
+        dice: dice,
+        sides: sides,
+        rolls: rolls,
+        total: total
+    });
+
+});
+
 // Implement a custom About page.
 app.get('/about', (request, response) => {
 	console.log('Calling "/about" on the Node.js server.')

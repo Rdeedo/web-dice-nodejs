@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Fetching Remote Dice Rolls</title>
+</head>
+<body>
+
+<h1>Fetch Remote Dice Rolls API</h1>
+
+<label>Number of Dice:</label>
+<input type="number" id="dice" value="1">
+
+<br><br>
+
+<label>Number of Sides:</label>
+<input type="number" id="sides" value="6">
+
+<br><br>
+
+<button onclick="rollDice()">Roll Dice from API</button>
+
+<h2>Result:</h2>
+
+<pre id="output"></pre>
+
+<script>
+
+const API =
+"https://your-api-name.azurewebsites.net";
+
+
+async function rollDice()
+{
+    const dice =
+        document.getElementById("dice").value;
+
+    const sides =
+        document.getElementById("sides").value;
+
+
+    const response =
+        await fetch(
+            API +
+            "/api/roll?dice=" +
+            dice +
+            "&sides=" +
+            sides
+        );
+
+
+    const data =
+        await response.json();
+
+
+    document.getElementById("output").textContent =
+        JSON.stringify(data, null, 2);
+}
+
+</script>
+
+</body>
+</html>
